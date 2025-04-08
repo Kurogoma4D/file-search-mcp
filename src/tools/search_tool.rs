@@ -17,6 +17,13 @@ pub struct SearchParams {
     pub keyword: String,
 }
 
+// File content parameters: file path
+#[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
+pub struct FileContentParams {
+    #[schemars(description = "Path to the file to read")]
+    pub file_path: String,
+}
+
 // Main tool struct
 #[derive(Debug, Clone)]
 pub struct SearchTool;
@@ -25,6 +32,75 @@ pub struct SearchTool;
 impl SearchTool {
     pub fn new() -> Self {
         Self {}
+    }
+
+    /// Read and return the content of a specified file
+    #[tool(description = "Read the content of a file from the specified path")]
+    async fn read_file_content(
+        &self,
+        #[tool(aggr)] params: FileContentParams,
+    ) -> Result<String, String> {
+        // Validate file path
+        let file_path = Path::new(&params.file_path);
+
+        // Check if the path exists
+        if !file_path.exists() {
+            return Err(format!(
+                "The specified path '{}' does not exist",
+                params.file_path
+            ));
+        }
+
+        // Check if the path is a file
+        if !file_path.is_file() {
+            return Err(format!(
+                "The specified path '{}' is not a file",
+                params.file_path
+            ));
+        }
+
+        // Try to read the file content
+        match fs::read_to_string(file_path) {
+            Ok(content) => {
+                if content.is_empty() {
+                    Ok("File is empty.".to_string())
+                } else {
+                    Ok(content)
+                }
+            }
+            Err(e) => {
+                // Handle binary files or read errors
+                tracing::error!("Error reading file '{}': {}", file_path.display(), e);
+
+                // Try to read as binary and check if it's a binary file
+                match fs::read(file_path) {
+                    Ok(bytes) => {
+                        // Check if it seems to be a binary file
+                        if bytes.iter().any(|&b| b == 0)
+                            || bytes
+                                .iter()
+                                .filter(|&&b| b < 32 && b != 9 && b != 10 && b != 13)
+                                .count()
+                                > bytes.len() / 10
+                        {
+                            Err(format!(
+                                "The file '{}' appears to be a binary file and cannot be displayed as text",
+                                params.file_path
+                            ))
+                        } else {
+                            Err(format!(
+                                "The file '{}' could not be read as text: {}",
+                                params.file_path, e
+                            ))
+                        }
+                    }
+                    Err(read_err) => Err(format!(
+                        "Error reading file '{}': {}",
+                        params.file_path, read_err
+                    )),
+                }
+            }
+        }
     }
 
     /// Perform full-text search for keywords on text files (such as .txt, .md, etc.) in the specified directory
@@ -283,7 +359,7 @@ impl ServerHandler for SearchTool {
                 .build(),
             server_info: Implementation::from_build_env(),
             instructions: Some(
-                "This server searches for keywords in text files within the specified directory."
+                "This server provides two tools: 1) Search for keywords in text files within a directory, 2) Read and display the content of a specific file."
                     .into(),
             ),
         }
