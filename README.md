@@ -20,7 +20,7 @@ This project implements the Model Context Protocol (MCP), making it compatible w
 
 - **[Rust](https://www.rust-lang.org/)**: For performance, safety, and concurrency
 - **[Tantivy](https://github.com/quickwit-oss/tantivy)**: A full-text search engine library in Rust
-- **[RMCP](https://crates.io/crates/rmcp)**: Rust implementation of the Model Context Protocol
+- **[RMCP](https://github.com/modelcontextprotocol/rust-sdk)**: Rust implementation of the Model Context Protocol
 - **[Tokio](https://tokio.rs/)**: Asynchronous runtime for Rust
 
 ## 📋 Usage
@@ -53,4 +53,4 @@ MIT License
 ## 🙏 Acknowledgements
 
 - [Tantivy](https://github.com/quickwit-oss/tantivy) for the full-text search engine
-- [RMCP](https://crates.io/crates/rmcp) for the Model Context Protocol implementation
+- [RMCP](https://github.com/modelcontextprotocol/rust-sdk) for the Model Context Protocol implementation

@@ -4,7 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-rmcp = { version = "0.1", features = ["server", "transport-io"] }
+rmcp = { git = "https://github.com/modelcontextprotocol/rust-sdk", branch = "main", features = [
+  "server",
+  "transport-io",
+] }
 tantivy = "0.22.0"
 tokio = { version = "1", features = [
   "macros",
