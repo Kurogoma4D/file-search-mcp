@@ -6,6 +6,7 @@ use tantivy::collector::TopDocs;
 use tantivy::query::QueryParser;
 use tantivy::schema::{STORED, Schema, TextFieldIndexing, TextOptions, Value};
 use tantivy::{Index, TantivyDocument, doc};
+use tracing;
 
 // Search parameters: directory path and search keyword
 #[derive(Debug, serde::Deserialize, schemars::JsonSchema)]
@@ -168,21 +169,21 @@ impl SearchTool {
                                         ))
                                         .map_err(|e| format!("Document addition error: {}", e))?;
                                     *indexed_files_count += 1;
-                                    println!("Indexed: {}", path.display());
+                                    tracing::debug!("Indexed: {}", path.display());
                                 } else {
                                     *skipped_files_count += 1;
-                                    println!("Skipped (empty file): {}", path.display());
+                                    tracing::debug!("Skipped (empty file): {}", path.display());
                                 }
                             }
                             Err(e) => {
                                 // Skip and continue on read errors
                                 *skipped_files_count += 1;
-                                println!("Skipped (read error): {} - {}", path.display(), e);
+                                tracing::debug!("Skipped (read error): {} - {}", path.display(), e);
                             }
                         }
                     } else {
                         *skipped_files_count += 1;
-                        println!("Skipped (non-text): {}", path.display());
+                        tracing::debug!("Skipped (non-text): {}", path.display());
                     }
                 }
             }
@@ -190,7 +191,7 @@ impl SearchTool {
         }
 
         // Execute directory processing
-        println!("Target directory for search: {}", dir_path.display());
+        tracing::info!("Target directory for search: {}", dir_path.display());
         process_directory(
             dir_path,
             &mut index_writer,
@@ -202,9 +203,11 @@ impl SearchTool {
             &mut skipped_files_count,
         )?;
 
-        println!(
+        tracing::info!(
             "Processing complete: Found files={}, Indexed={}, Skipped={}",
-            found_files_count, indexed_files_count, skipped_files_count
+            found_files_count,
+            indexed_files_count,
+            skipped_files_count
         );
 
         // Return an error if no files were indexed
