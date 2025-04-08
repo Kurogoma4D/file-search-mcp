@@ -11,6 +11,7 @@ This project implements the Model Context Protocol (MCP), making it compatible w
 ## ✨ Features
 
 - **Full-text search**: Search for keywords in text files across a directory structure
+- **File content reader**: Read and display the content of specific text files
 - **Smart file detection**: Automatically identifies text files and skips binary files
 - **MCP integration**: Works with systems that support the Model Context Protocol
 - **In-memory indexing**: Creates fast, temporary indexes for search operations
@@ -45,6 +46,22 @@ Replace `<path-to-repo>` to your cloned repository path.
 2. It processes the content of text files and adds them to an in-memory Tantivy index
 3. When a search is performed, it queries the index for matches and ranks them by relevance
 4. Results are returned with file paths and relevance scores
+5. The file content reader tool allows you to view the content of any text file by providing its path
+
+## 🛠️ Available Tools
+
+### Search Tool
+
+- **Description**: Search for keywords in text files within a specified directory
+- **Parameters**:
+  - `directory`: Path to the directory to search
+  - `keyword`: Keyword to search for
+
+### File Content Reader Tool
+
+- **Description**: Read and display the content of a specific file
+- **Parameters**:
+  - `file_path`: Path to the file to read
 
 ## 📄 License
 
