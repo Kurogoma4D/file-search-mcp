@@ -24,21 +24,50 @@ This project implements the Model Context Protocol (MCP), making it compatible w
 - **[RMCP](https://github.com/modelcontextprotocol/rust-sdk)**: Rust implementation of the Model Context Protocol
 - **[Tokio](https://tokio.rs/)**: Asynchronous runtime for Rust
 
-## 📋 Usage
+## 📋 Build and Usage
 
-First, install Rust sdk from [here](https://www.rust-lang.org/).
+First, install Rust from [here](https://www.rust-lang.org/).
 
-Clone this repository.
-
+Clone this repository:
 ```bash
 git clone git@github.com:Kurogoma4D/file-search-mcp.git
+cd file-search-mcp
 ```
 
-And add this to your MCP settings (in Cursor, Claude, ...).
+Build the project:
+```bash
+# Build in debug mode (creates binary in target/debug/)
+cargo build
 
-- command: `<path-to-repo>/target/release/file-search-mcp`
+# Build in release mode for production (creates optimized binary in target/release/)
+cargo build --release
+```
 
-Replace `<path-to-repo>` to your cloned repository path.
+Add the executable to your MCP settings (in Cursor, Claude, or other MCP clients):
+
+- **Simple path reference**:
+  - Debug build: `<path-to-repo>/target/debug/file-search-mcp`
+  - Release build: `<path-to-repo>/target/release/file-search-mcp`
+
+- **Claude Desktop/Claude Code configuration example**:
+  ```json
+  {
+    "mcpServers": {
+      "file-search-mcp": {
+        "command": "<absolute-path-to-repo>/target/release/file-search-mcp",
+        "args": [],
+        "env": {}
+      }
+    }
+  }
+  ```
+
+Replace `<path-to-repo>` or `<absolute-path-to-repo>` with the full path to your cloned repository.
+
+**Platform-specific path examples**:
+- macOS: `/Users/username/projects/file-search-mcp`
+- Linux: `/home/username/projects/file-search-mcp`
+- Windows: `C:\Users\username\projects\file-search-mcp`
 
 ## 🔄 How It Works
 
