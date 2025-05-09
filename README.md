@@ -44,10 +44,30 @@ cargo build --release
 ```
 
 Add the executable to your MCP settings (in Cursor, Claude, or other MCP clients):
-- Debug build: `<path-to-repo>/target/debug/file-search-mcp`
-- Release build: `<path-to-repo>/target/release/file-search-mcp`
 
-Replace `<path-to-repo>` with the absolute path to your cloned repository.
+- **Simple path reference**:
+  - Debug build: `<path-to-repo>/target/debug/file-search-mcp`
+  - Release build: `<path-to-repo>/target/release/file-search-mcp`
+
+- **Claude Desktop/Claude Code configuration example**:
+  ```json
+  {
+    "mcpServers": {
+      "file-search-mcp": {
+        "command": "<absolute-path-to-repo>/target/release/file-search-mcp",
+        "args": [],
+        "env": {}
+      }
+    }
+  }
+  ```
+
+Replace `<path-to-repo>` or `<absolute-path-to-repo>` with the full path to your cloned repository.
+
+**Platform-specific path examples**:
+- macOS: `/Users/username/projects/file-search-mcp`
+- Linux: `/home/username/projects/file-search-mcp`
+- Windows: `C:\Users\username\projects\file-search-mcp`
 
 ## 🔄 How It Works
 
